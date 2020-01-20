@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,20 +71,20 @@ public class RoomTest {
         room.spread(x, y, new ArrayList<JSONObject>());
 
         for (int i = 0; i < cx.length; i++) {
-            assertTrue(board[x + cx[i]][y + cy[i]].getState() == Square.State.UNCONVERED);
+            assertTrue(board[x + cx[i]][y + cy[i]].getState() == Square.State.UNCOVERED);
         }
         assertTrue(board[3][3].getState() == Square.State.COVERED);
     }
 
     @Test
-    public void testClick() {
+    public void testLeftClick() {
         Room room = new Room(8, 8);
         Square[][] board = room.getBoard();
         int x = 1;
         int y = 1;
         board[x][y].setMine(true);
 
-        assertTrue(room.click(x, y).size() == 0);
+        assertTrue(room.leftClick(x, y).size() == 64);
 
         int[] cx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
         int[] cy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
@@ -97,6 +98,34 @@ public class RoomTest {
             board[3][i].setMine(true);
         }
 
-        assertTrue(room.click(x, y).size() == 9);
+        assertTrue(room.leftClick(x, y).size() == 9);
+    }
+
+    @Test
+    public void testRightClick() {
+        Room room = new Room(8, 8);
+        Square[][] board = room.getBoard();
+        int x = 1;
+        int y = 1;
+
+        room.rightClick(x, y);
+        assertTrue(board[x][y].getState() == Square.State.FLAGED);
+
+        board[x][y].setState(Square.State.UNCOVERED);
+        room.rightClick(x, y);
+        assertTrue(board[x][y].getState() == Square.State.UNCOVERED);
+    }
+
+    @Test
+    public void testGameOver() {
+        Room room = new Room(8, 8);
+        Square[][] board = room.getBoard();
+
+        List<JSONObject> res = room.gameOver();
+        assertTrue(res.size() == 64);
+
+        board[1][1].setState(Square.State.UNCOVERED);
+        res = room.gameOver();
+        assertTrue(res.size() == 63);
     }
 }
