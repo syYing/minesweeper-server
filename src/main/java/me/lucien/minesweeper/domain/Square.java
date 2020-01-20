@@ -9,6 +9,6 @@ public class Square {
     private State state = State.COVERED;
 
     public static enum State {
-        COVERED, UNCONVERED, FLAGED
+        COVERED, UNCOVERED, FLAGED
     }
 }
