@@ -49,8 +49,8 @@ public class Room {
         }
     }
 
-    public List<JSONObject> leftClick(int x, int y) {
-        List<JSONObject> res = new ArrayList<>();
+    public List<SquareData> uncover(int x, int y) {
+        List<SquareData> res = new ArrayList<>();
 
         if (board[x][y].isMine()) {
             return gameOver();
@@ -61,21 +61,13 @@ public class Room {
         return res;
     }
 
-    public void spread(int x, int y, List<JSONObject> res) {
+    public void spread(int x, int y, List<SquareData> res) {
         if (x < 0 || x >= this.height || y < 0 || y >= this.width || board[x][y].getState() != Square.State.COVERED) {
             return;
         }
 
         int num = count(x, y);
-        JSONObject o = new JSONObject();
-        try {
-            o.put("x", x);
-            o.put("y", y);
-            o.put("num", num);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        res.add(o);
+        res.add(new SquareData(x, y, num));
         board[x][y].setState(Square.State.UNCOVERED);
 
         if (num == 0) {
@@ -112,33 +104,23 @@ public class Room {
         return num;
     }
 
-    public void rightClick(int x, int y) {
+    public void flag(int x, int y) {
         if (board[x][y].getState() == Square.State.COVERED) {
             board[x][y].setState(Square.State.FLAGED);
         }
     }
 
-    public List<JSONObject> gameOver() {
-        List<JSONObject> res = new ArrayList<>();
+    public List<SquareData> gameOver() {
+        List<SquareData> res = new ArrayList<>();
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 if (board[i][j].getState() != Square.State.UNCOVERED) {
-                    JSONObject o = new JSONObject();
-                    try {
-                        o.put("x", i);
-                        o.put("y", j);
-
-                        if (board[i][j].isMine()) {
-                            o.put("num", -1);
-                        } else {
-                            o.put("num", count(i, j));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (board[i][j].isMine()) {
+                        res.add(new SquareData(i, j, -1));
+                    } else {
+                        res.add(new SquareData(i, j, count(i, j)));
                     }
-
-                    res.add(o);
                 }
             }
         }
