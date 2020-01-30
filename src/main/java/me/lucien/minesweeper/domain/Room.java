@@ -1,14 +1,17 @@
 package me.lucien.minesweeper.domain;
 
 import lombok.Data;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class Room {
+
+    private static int id = 1;
+
+    private int roomId;
+    private String roomKey;
 
     private int width;
     private int height;
@@ -17,6 +20,8 @@ public class Room {
     private int traveledNum;
 
     public Room(int width, int height) {
+        this.roomId = id++;
+        this.roomKey = 
         this.width = width;
         this.height = height;
         this.board = new Square[this.height][this.width];
@@ -106,7 +111,7 @@ public class Room {
 
     public void flag(int x, int y) {
         if (board[x][y].getState() == Square.State.COVERED) {
-            board[x][y].setState(Square.State.FLAGED);
+            board[x][y].setState(Square.State.FLAGGED);
         }
     }
 

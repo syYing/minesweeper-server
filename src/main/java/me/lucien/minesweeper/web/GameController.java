@@ -2,7 +2,6 @@ package me.lucien.minesweeper.web;
 
 import me.lucien.minesweeper.domain.Room;
 import me.lucien.minesweeper.domain.SquareData;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.http.HttpStatus;
