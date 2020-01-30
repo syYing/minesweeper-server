@@ -2,8 +2,10 @@ package me.lucien.minesweeper.domain;
 
 import lombok.Data;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Data
 public class Room {
@@ -21,7 +23,11 @@ public class Room {
 
     public Room(int width, int height) {
         this.roomId = id++;
-        this.roomKey = 
+
+        byte[] bytes = new byte[32];
+        new Random().nextBytes(bytes);
+        this.roomKey = new String(bytes, Charset.forName("UTF-8"));
+
         this.width = width;
         this.height = height;
         this.board = new Square[this.height][this.width];
