@@ -77,14 +77,14 @@ public class RoomTest {
     }
 
     @Test
-    public void testLeftClick() {
+    public void testUncover() {
         Room room = new Room(8, 8);
         Square[][] board = room.getBoard();
         int x = 1;
         int y = 1;
         board[x][y].setMine(true);
 
-        assertTrue(room.leftClick(x, y).size() == 64);
+        assertTrue(room.uncover(x, y).size() == 64);
 
         int[] cx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
         int[] cy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
@@ -98,21 +98,21 @@ public class RoomTest {
             board[3][i].setMine(true);
         }
 
-        assertTrue(room.leftClick(x, y).size() == 9);
+        assertTrue(room.uncover(x, y).size() == 9);
     }
 
     @Test
-    public void testRightClick() {
+    public void testFlag() {
         Room room = new Room(8, 8);
         Square[][] board = room.getBoard();
         int x = 1;
         int y = 1;
 
-        room.rightClick(x, y);
+        room.flag(x, y);
         assertTrue(board[x][y].getState() == Square.State.FLAGED);
 
         board[x][y].setState(Square.State.UNCOVERED);
-        room.rightClick(x, y);
+        room.flag(x, y);
         assertTrue(board[x][y].getState() == Square.State.UNCOVERED);
     }
 

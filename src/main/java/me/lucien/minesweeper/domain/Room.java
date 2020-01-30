@@ -49,7 +49,7 @@ public class Room {
         }
     }
 
-    public List<JSONObject> leftClick(int x, int y) {
+    public List<JSONObject> uncover(int x, int y) {
         List<JSONObject> res = new ArrayList<>();
 
         if (board[x][y].isMine()) {
@@ -112,7 +112,7 @@ public class Room {
         return num;
     }
 
-    public void rightClick(int x, int y) {
+    public void flag(int x, int y) {
         if (board[x][y].getState() == Square.State.COVERED) {
             board[x][y].setState(Square.State.FLAGED);
         }

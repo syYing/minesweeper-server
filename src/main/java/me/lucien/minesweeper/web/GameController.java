@@ -34,7 +34,7 @@ public class GameController {
             throw new IndexOutOfBoundsException();
         }
 
-        List<JSONObject> res = leftClick(x, y);
+        List<JSONObject> res = room.uncover(x, y);
 
         return res;
     }
@@ -45,7 +45,7 @@ public class GameController {
             throw new IndexOutOfBoundsException();
         }
 
-        room.rightClick(x, y);
+        room.flag(x, y);
     }
 
     @ExceptionHandler(HttpException.class)
