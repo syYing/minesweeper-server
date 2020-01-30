@@ -71,9 +71,9 @@ public class RoomTest {
         room.spread(x, y, new ArrayList<JSONObject>());
 
         for (int i = 0; i < cx.length; i++) {
-            assertTrue(board[x + cx[i]][y + cy[i]].getState() == Square.State.UNCOVERED);
+            assertEquals(Square.State.UNCOVERED, board[x + cx[i]][y + cy[i]].getState());
         }
-        assertTrue(board[3][3].getState() == Square.State.COVERED);
+        assertEquals(Square.State.COVERED, board[3][3].getState());
     }
 
     @Test
@@ -84,7 +84,7 @@ public class RoomTest {
         int y = 1;
         board[x][y].setMine(true);
 
-        assertTrue(room.uncover(x, y).size() == 64);
+        assertEquals(64, room.uncover(x, y).size());
 
         int[] cx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
         int[] cy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
@@ -98,7 +98,7 @@ public class RoomTest {
             board[3][i].setMine(true);
         }
 
-        assertTrue(room.uncover(x, y).size() == 9);
+        assertEquals(9, room.uncover(x, y).size());
     }
 
     @Test
@@ -109,11 +109,11 @@ public class RoomTest {
         int y = 1;
 
         room.flag(x, y);
-        assertTrue(board[x][y].getState() == Square.State.FLAGED);
+        assertEquals(Square.State.FLAGED, board[x][y].getState());
 
         board[x][y].setState(Square.State.UNCOVERED);
         room.flag(x, y);
-        assertTrue(board[x][y].getState() == Square.State.UNCOVERED);
+        assertEquals(Square.State.UNCOVERED, board[x][y].getState());
     }
 
     @Test
@@ -122,10 +122,10 @@ public class RoomTest {
         Square[][] board = room.getBoard();
 
         List<JSONObject> res = room.gameOver();
-        assertTrue(res.size() == 64);
+        assertEquals(64, res.size());
 
         board[1][1].setState(Square.State.UNCOVERED);
         res = room.gameOver();
-        assertTrue(res.size() == 63);
+        assertEquals(63, res.size());
     }
 }
