@@ -68,7 +68,7 @@ public class RoomTest {
             board[3][i].setMine(true);
         }
 
-        room.spread(x, y, new ArrayList<JSONObject>());
+        room.spread(x, y, new ArrayList<SquareData>());
 
         for (int i = 0; i < cx.length; i++) {
             assertEquals(Square.State.UNCOVERED, board[x + cx[i]][y + cy[i]].getState());
@@ -121,7 +121,7 @@ public class RoomTest {
         Room room = new Room(8, 8);
         Square[][] board = room.getBoard();
 
-        List<JSONObject> res = room.gameOver();
+        List<SquareData> res = room.gameOver();
         assertEquals(64, res.size());
 
         board[1][1].setState(Square.State.UNCOVERED);

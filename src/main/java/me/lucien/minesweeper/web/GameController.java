@@ -1,6 +1,7 @@
 package me.lucien.minesweeper.web;
 
 import me.lucien.minesweeper.domain.Room;
+import me.lucien.minesweeper.domain.SquareData;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
@@ -29,12 +30,12 @@ public class GameController {
     }
 
     @PostMapping("/square/{x}/{y}")
-    public List<JSONObject> leftClick(@PathVariable("x") int x, @PathVariable("y") int y) {
+    public List<SquareData> leftClick(@PathVariable("x") int x, @PathVariable("y") int y) {
         if (x < 0 || x >= room.getWidth() || y < 0 || y >= room.getHeight()) {
             throw new IndexOutOfBoundsException();
         }
 
-        List<JSONObject> res = room.uncover(x, y);
+        List<SquareData> res = room.uncover(x, y);
 
         return res;
     }
