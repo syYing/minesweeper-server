@@ -127,4 +127,17 @@ public class RoomTest {
         res = room.gameOver();
         assertEquals(63, res.size());
     }
+
+    @Test
+    public void testGetGameData() {
+        Room room = new Room(8, 8);
+        Square[][] board = room.getBoard();
+        room.flag(1, 1);
+        room.flag(2, 2);
+        List<SquareData> res = room.getGameData();
+
+        for (int i = 0; i < res.size(); i++) {
+            assertEquals(-1, res.get(i).getNum());
+        }
+    }
 }

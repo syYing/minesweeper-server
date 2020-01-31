@@ -138,4 +138,20 @@ public class Room {
 
         return res;
     }
+
+    public List<SquareData> getGameData() {
+        List<SquareData> res = new ArrayList<>();
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j].getState() == Square.State.UNCOVERED) {
+                    res.add(new SquareData(i, j, count(i, j)));
+                } else if (board[i][j].getState() == Square.State.FLAGGED) {
+                    res.add(new SquareData(i, j, -1));
+                }
+            }
+        }
+
+        return res;
+    }
 }
