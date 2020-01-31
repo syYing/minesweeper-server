@@ -1,14 +1,19 @@
 package me.lucien.minesweeper.domain;
 
 import lombok.Data;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Data
 public class Room {
+
+    private static int id = 1;
+
+    private int roomId;
+    private String roomKey;
 
     private int width;
     private int height;
@@ -17,6 +22,12 @@ public class Room {
     private int traveledNum;
 
     public Room(int width, int height) {
+        this.roomId = id++;
+
+        byte[] bytes = new byte[32];
+        new Random().nextBytes(bytes);
+        this.roomKey = new String(bytes, Charset.forName("UTF-8"));
+
         this.width = width;
         this.height = height;
         this.board = new Square[this.height][this.width];
@@ -106,7 +117,7 @@ public class Room {
 
     public void flag(int x, int y) {
         if (board[x][y].getState() == Square.State.COVERED) {
-            board[x][y].setState(Square.State.FLAGED);
+            board[x][y].setState(Square.State.FLAGGED);
         }
     }
 
@@ -121,6 +132,22 @@ public class Room {
                     } else {
                         res.add(new SquareData(i, j, count(i, j)));
                     }
+                }
+            }
+        }
+
+        return res;
+    }
+
+    public List<SquareData> getGameData() {
+        List<SquareData> res = new ArrayList<>();
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j].getState() == Square.State.UNCOVERED) {
+                    res.add(new SquareData(i, j, count(i, j)));
+                } else if (board[i][j].getState() == Square.State.FLAGGED) {
+                    res.add(new SquareData(i, j, -1));
                 }
             }
         }

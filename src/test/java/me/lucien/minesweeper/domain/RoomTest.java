@@ -1,7 +1,6 @@
 package me.lucien.minesweeper.domain;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +108,7 @@ public class RoomTest {
         int y = 1;
 
         room.flag(x, y);
-        assertEquals(Square.State.FLAGED, board[x][y].getState());
+        assertEquals(Square.State.FLAGGED, board[x][y].getState());
 
         board[x][y].setState(Square.State.UNCOVERED);
         room.flag(x, y);
@@ -127,5 +126,18 @@ public class RoomTest {
         board[1][1].setState(Square.State.UNCOVERED);
         res = room.gameOver();
         assertEquals(63, res.size());
+    }
+
+    @Test
+    public void testGetGameData() {
+        Room room = new Room(8, 8);
+        Square[][] board = room.getBoard();
+        room.flag(1, 1);
+        room.flag(2, 2);
+        List<SquareData> res = room.getGameData();
+
+        for (int i = 0; i < res.size(); i++) {
+            assertEquals(-1, res.get(i).getNum());
+        }
     }
 }
