@@ -28,12 +28,12 @@ public class GameController {
         }
 
         Room room = new Room(width, height);
-        roomMap.put(room.getRoomId(), room);
+        roomMap.put(room.getId(), room);
 
         JSONObject o = new JSONObject();
         try {
-            o.put("roomId", room.getRoomId());
-            o.put("roomKey", room.getRoomKey());
+            o.put("roomId", room.getId());
+            o.put("roomKey", room.getKey());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -98,7 +98,7 @@ public class GameController {
 
         Room room = roomMap.get(roomId);
 
-        if (room.getRoomKey() != roomKey) {
+        if (room.getKey() != roomKey) {
             throw new HttpException(HttpStatus.FORBIDDEN, "The roomKey is wrong.");
         }
     }

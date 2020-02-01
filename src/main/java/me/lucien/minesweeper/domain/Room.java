@@ -1,19 +1,16 @@
 package me.lucien.minesweeper.domain;
 
-import lombok.Data;
-
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Data
 public class Room {
 
-    private static int id = 1;
+    private static int roomId = 1;
 
-    private int roomId;
-    private String roomKey;
+    private int id;
+    private String key;
 
     private int width;
     private int height;
@@ -22,11 +19,11 @@ public class Room {
     private int traveledNum;
 
     public Room(int width, int height) {
-        this.roomId = id++;
+        this.id = roomId++;
 
         byte[] bytes = new byte[32];
         new Random().nextBytes(bytes);
-        this.roomKey = new String(bytes, Charset.forName("UTF-8"));
+        this.key = new String(bytes, Charset.forName("UTF-8"));
 
         this.width = width;
         this.height = height;
@@ -153,5 +150,25 @@ public class Room {
         }
 
         return res;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Square[][] getBoard() {
+        return board;
     }
 }

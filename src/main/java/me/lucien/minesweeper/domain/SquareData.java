@@ -9,7 +9,15 @@ public class SquareData {
     private int y;
     private int num;
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     public int getNum() {
-        return this.num;
+        return num;
     }
 }
