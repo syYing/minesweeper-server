@@ -2,9 +2,9 @@ package me.lucien.minesweeper.web;
 
 import me.lucien.minesweeper.domain.Room;
 import me.lucien.minesweeper.domain.SquareData;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +14,12 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@ConfigurationProperties(prefix = "room")
 public class GameController {
 
     private Map<Integer, Room> roomMap = new HashMap<>();
-    private int capacity;
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
+    @Value("${room.capacity}")
+    private int capacity;
 
     @PostMapping("/room")
     public String createRoom(@RequestParam("width") int width, @RequestParam("height") int height) throws HttpException {
