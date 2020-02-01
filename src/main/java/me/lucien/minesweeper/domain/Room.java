@@ -1,13 +1,10 @@
 package me.lucien.minesweeper.domain;
 
-import lombok.Data;
-
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Data
 public class Room {
 
     private static int id = 1;
@@ -153,5 +150,25 @@ public class Room {
         }
 
         return res;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public String getRoomKey() {
+        return roomKey;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Square[][] getBoard() {
+        return board;
     }
 }

@@ -1,8 +1,5 @@
 package me.lucien.minesweeper.domain;
 
-import lombok.Data;
-
-@Data
 public class Square {
 
     private boolean isMine = false;
@@ -10,5 +7,21 @@ public class Square {
 
     public static enum State {
         COVERED, UNCOVERED, FLAGGED
+    }
+
+    public boolean isMine() {
+        return isMine;
+    }
+
+    public void setMine(boolean mine) {
+        isMine = mine;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 }
