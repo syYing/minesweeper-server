@@ -1,13 +1,28 @@
 package me.lucien.minesweeper.web;
 
-import lombok.Data;
 import org.springframework.http.HttpStatus;
 
-@Data
 public class HttpException extends Exception {
 
     private HttpStatus status;
     private String message;
+
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(HttpStatus status) {
+        this.status = status;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public HttpException(HttpStatus status, String message) {
         this.status = status;
