@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping(consumes = "application/json")
 public class GameController {
 
     private Map<Integer, Room> roomMap = new HashMap<>();
