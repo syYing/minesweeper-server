@@ -2,6 +2,7 @@ package me.lucien.minesweeper.domain;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 
@@ -22,6 +23,7 @@ public class Room {
 
         byte[] bytes = new byte[32];
         new Random().nextBytes(bytes);
+        bytes = Base64.getEncoder().encode(bytes);
         this.key = new String(bytes, Charset.forName("UTF-8"));
 
         this.width = width;
