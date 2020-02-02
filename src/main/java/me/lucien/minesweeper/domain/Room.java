@@ -1,8 +1,6 @@
 package me.lucien.minesweeper.domain;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 
@@ -20,11 +18,7 @@ public class Room {
 
     public Room(int width, int height) {
         this.id = roomId++;
-
-        byte[] bytes = new byte[32];
-        new Random().nextBytes(bytes);
-        bytes = Base64.getEncoder().encode(bytes);
-        this.key = new String(bytes, Charset.forName("UTF-8"));
+        this.key = generateRandomString();
 
         this.width = width;
         this.height = height;
@@ -150,6 +144,21 @@ public class Room {
         }
 
         return res;
+    }
+
+    public String generateRandomString() {
+        int leftLimit = 48;
+        int rightLimit = 122;
+        int targetLength = 32;
+        Random random = new Random();
+
+        String generated = random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+        return generated;
     }
 
     public int getId() {

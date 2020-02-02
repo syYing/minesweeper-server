@@ -98,7 +98,7 @@ public class GameController {
 
         Room room = roomMap.get(id);
 
-        if (room.getKey().equals(key)) {
+        if (!room.getKey().equals(key)) {
             throw new HttpException(HttpStatus.FORBIDDEN, "The key is wrong.");
         }
     }
