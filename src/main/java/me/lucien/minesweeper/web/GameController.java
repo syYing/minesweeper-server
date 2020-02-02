@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(consumes = "application/json")
 public class GameController {
 
     private Map<Integer, Room> roomMap = new HashMap<>();
@@ -33,8 +32,8 @@ public class GameController {
 
         JSONObject o = new JSONObject();
         try {
-            o.put("roomId", room.getId());
-            o.put("roomKey", room.getKey());
+            o.put("id", room.getId());
+            o.put("key", room.getKey());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -42,28 +41,28 @@ public class GameController {
         return o.toString();
     }
 
-    @GetMapping("/room/{roomId}")
-    public List<SquareData> enterRoom(@PathVariable("roomId") int roomId,
-                                      @RequestParam("roomKey") String roomKey) throws HttpException {
-        checkLegitimacy(roomId, roomKey);
+    @GetMapping("/room/{id}")
+    public List<SquareData> enterRoom(@PathVariable("id") int id,
+                                      @RequestParam("key") String key) throws HttpException {
+        checkLegitimacy(id, key);
 
-        Room room = roomMap.get(roomId);
+        Room room = roomMap.get(id);
 
         return room.getGameData();
     }
 
-    @DeleteMapping("/room/{roomId}")
-    public void deleteRoom(@PathVariable("roomId") int roomId,
-                           @RequestParam("roomKey") String roomKey) throws HttpException {
-        checkLegitimacy(roomId, roomKey);
-        roomMap.remove(roomId);
+    @DeleteMapping("/room/{id}")
+    public void deleteRoom(@PathVariable("id") int id,
+                           @RequestParam("key") String key) throws HttpException {
+        checkLegitimacy(id, key);
+        roomMap.remove(id);
     }
 
-    @PostMapping("/room/{roomId}/square/{x}/{y}")
-    public List<SquareData> leftClick(@PathVariable("roomId") int roomId, @PathVariable("x") int x, @PathVariable("y") int y,
-                                      @RequestParam("roomKey") String roomKey) throws HttpException {
-        checkLegitimacy(roomId, roomKey);
-        Room room = roomMap.get(roomId);
+    @PostMapping("/room/{id}/square/{x}/{y}")
+    public List<SquareData> leftClick(@PathVariable("id") int id, @PathVariable("x") int x, @PathVariable("y") int y,
+                                      @RequestParam("key") String key) throws HttpException {
+        checkLegitimacy(id, key);
+        Room room = roomMap.get(id);
 
         if (x < 0 || x >= room.getWidth() || y < 0 || y >= room.getHeight()) {
             throw new IndexOutOfBoundsException();
@@ -74,11 +73,11 @@ public class GameController {
         return res;
     }
 
-    @PatchMapping("/room/{roomId}/square/{x}/{y}")
-    public void rightClick(@PathVariable("roomId") int roomId, @PathVariable("x") int x, @PathVariable("y") int y,
-                           @RequestParam("roomKey") String roomKey) throws HttpException {
-        checkLegitimacy(roomId, roomKey);
-        Room room = roomMap.get(roomId);
+    @PatchMapping("/room/{id}/square/{x}/{y}")
+    public void rightClick(@PathVariable("id") int id, @PathVariable("x") int x, @PathVariable("y") int y,
+                           @RequestParam("key") String key) throws HttpException {
+        checkLegitimacy(id, key);
+        Room room = roomMap.get(id);
 
         if (x < 0 || x >= room.getWidth() || y < 0 || y >= room.getHeight()) {
             throw new IndexOutOfBoundsException();
@@ -92,15 +91,15 @@ public class GameController {
         return new ResponseEntity(e.getMessage(), e.getStatus());
     }
 
-    private void checkLegitimacy(int roomId, String roomKey) throws HttpException {
-        if (!roomMap.containsKey(roomId)) {
+    private void checkLegitimacy(int id, String key) throws HttpException {
+        if (!roomMap.containsKey(id)) {
             throw new HttpException(HttpStatus.NOT_FOUND, "The room does't exist.");
         }
 
-        Room room = roomMap.get(roomId);
+        Room room = roomMap.get(id);
 
-        if (room.getKey() != roomKey) {
-            throw new HttpException(HttpStatus.FORBIDDEN, "The roomKey is wrong.");
+        if (room.getKey().equals(key)) {
+            throw new HttpException(HttpStatus.FORBIDDEN, "The key is wrong.");
         }
     }
 }
