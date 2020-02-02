@@ -16,7 +16,6 @@ public class Room {
     private int height;
     private int mineNum;
     private Square[][] board;
-    private int traveledNum;
 
     public Room(int width, int height) {
         this.id = roomId++;
@@ -29,7 +28,6 @@ public class Room {
         this.height = height;
         this.board = new Square[this.height][this.width];
         this.mineNum = calculateMineNum(height, width);
-        this.traveledNum = 0;
         initialize();
     }
 
