@@ -1,8 +1,8 @@
 package me.lucien.minesweeper.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
+import static me.lucien.minesweeper.util.StringGenerator.generateRandomString;
 
 public class Room {
 
@@ -144,21 +144,6 @@ public class Room {
         }
 
         return res;
-    }
-
-    public String generateRandomString() {
-        int leftLimit = 48;
-        int rightLimit = 122;
-        int targetLength = 32;
-        Random random = new Random();
-
-        String generated = random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(targetLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
-
-        return generated;
     }
 
     public int getId() {
