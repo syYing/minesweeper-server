@@ -18,7 +18,7 @@ public class Room {
 
     public Room(int width, int height) {
         this.id = roomId++;
-        this.key = generateRandomString();
+        this.key = generateRandomString(32);
 
         this.width = width;
         this.height = height;

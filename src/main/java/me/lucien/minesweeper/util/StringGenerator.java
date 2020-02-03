@@ -17,8 +17,7 @@ public class StringGenerator {
         }
     }
 
-    public static String generateRandomString() {
-        int targetLength = 32;
+    public static String generateRandomString(int targetLength) {
         Random random = new Random();
 
         String generated = random.ints(0, 62)
