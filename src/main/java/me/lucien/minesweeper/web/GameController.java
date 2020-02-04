@@ -87,8 +87,8 @@ public class GameController {
     }
 
     @ExceptionHandler(HttpException.class)
-    public ResponseEntity handleHttpException(HttpException e) {
-        return new ResponseEntity(e.getMessage(), e.getStatus());
+    public ResponseEntity<String> handleHttpException(HttpException e) {
+        return new ResponseEntity<>(e.getMessage(), e.getStatus());
     }
 
     private void checkLegitimacy(int id, String key) throws HttpException {
