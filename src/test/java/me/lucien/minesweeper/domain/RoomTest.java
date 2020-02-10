@@ -11,13 +11,13 @@ public class RoomTest {
 
     @Test
     public void testCalculateMineNum() {
-        int num = Room.calculateMineNum(8, 8);
-        assertEquals(10, num);
+        int num = Room.calculateMineNum(15, 10);
+        assertEquals(23, num);
     }
 
     @Test
     public void testInitialize() {
-        Room room = new Room(8, 8);
+        Room room = new Room(15, 10);
         int num = 0;
 
         for (Square[] row : room.getBoard()) {
@@ -28,12 +28,12 @@ public class RoomTest {
             }
         }
 
-        assertEquals(10, num);
+        assertEquals(23, num);
     }
 
     @Test
     public void testCount() {
-        Room room = new Room(8, 8);
+        Room room = new Room(15, 10);
         Square[][] board = room.getBoard();
         int x = 1;
         int y = 1;
@@ -51,7 +51,7 @@ public class RoomTest {
 
     @Test
     public void testSpread() {
-        Room room = new Room(8, 8);
+        Room room = new Room(15, 10);
         Square[][] board = room.getBoard();
         int x = 1;
         int y = 1;
@@ -77,13 +77,13 @@ public class RoomTest {
 
     @Test
     public void testUncover() {
-        Room room = new Room(8, 8);
+        Room room = new Room(15, 10);
         Square[][] board = room.getBoard();
         int x = 1;
         int y = 1;
         board[x][y].setMine(true);
 
-        assertEquals(64, room.uncover(x, y).size());
+        assertEquals(150, room.uncover(x, y).size());
 
         int[] cx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
         int[] cy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
@@ -102,7 +102,7 @@ public class RoomTest {
 
     @Test
     public void testFlag() {
-        Room room = new Room(8, 8);
+        Room room = new Room(15, 10);
         Square[][] board = room.getBoard();
         int x = 1;
         int y = 1;
@@ -117,20 +117,20 @@ public class RoomTest {
 
     @Test
     public void testGameOver() {
-        Room room = new Room(8, 8);
+        Room room = new Room(15, 10);
         Square[][] board = room.getBoard();
 
         List<SquareData> res = room.gameOver();
-        assertEquals(64, res.size());
+        assertEquals(150, res.size());
 
         board[1][1].setState(Square.State.UNCOVERED);
         res = room.gameOver();
-        assertEquals(63, res.size());
+        assertEquals(149, res.size());
     }
 
     @Test
     public void testGetGameData() {
-        Room room = new Room(8, 8);
+        Room room = new Room(15, 10);
         Square[][] board = room.getBoard();
         room.flag(1, 1);
         room.flag(2, 2);
