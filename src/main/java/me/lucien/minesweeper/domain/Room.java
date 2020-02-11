@@ -22,13 +22,13 @@ public class Room {
 
         this.width = width;
         this.height = height;
-        this.board = new Square[this.height][this.width];
-        this.mineNum = calculateMineNum(height, width);
+        this.board = new Square[this.width][this.height];
+        this.mineNum = calculateMineNum(width, height);
         initialize();
     }
 
     public static int calculateMineNum(int width, int height) {
-        return height * width * 10 / 64;
+        return width * height * 10 / 64;
     }
 
     public void initialize() {
@@ -39,12 +39,12 @@ public class Room {
         }
 
         for (int i = 0; i < this.mineNum; i++) {
-            int x = (int)(Math.random() * this.height);
-            int y = (int)(Math.random() * this.width);
+            int x = (int)(Math.random() * this.width);
+            int y = (int)(Math.random() * this.height);
 
             while (board[x][y].isMine()) {
-                x = (int)(Math.random() * this.height);
-                y = (int)(Math.random() * this.width);
+                x = (int)(Math.random() * this.width);
+                y = (int)(Math.random() * this.height);
             }
 
             board[x][y].setMine(true);
@@ -64,7 +64,7 @@ public class Room {
     }
 
     public void spread(int x, int y, List<SquareData> res) {
-        if (x < 0 || x >= this.height || y < 0 || y >= this.width || board[x][y].getState() != Square.State.COVERED) {
+        if (x < 0 || x >= this.width || y < 0 || y >= this.height || board[x][y].getState() != Square.State.COVERED) {
             return;
         }
 
@@ -94,7 +94,7 @@ public class Room {
             int newx = x + cx[i];
             int newy = y + cy[i];
 
-            if (newx < 0 || newx >= this.height || newy < 0 || newy >= this.width) {
+            if (newx < 0 || newx >= this.width || newy < 0 || newy >= this.height) {
                 continue;
             }
 
