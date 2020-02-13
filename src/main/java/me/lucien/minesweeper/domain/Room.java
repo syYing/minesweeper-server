@@ -109,6 +109,8 @@ public class Room {
     public void flag(int x, int y) {
         if (board[x][y].getState() == Square.State.COVERED) {
             board[x][y].setState(Square.State.FLAGGED);
+        } else if (board[x][y].getState() == Square.State.FLAGGED) {
+            board[x][y].setState(Square.State.COVERED);
         }
     }
 
@@ -164,5 +166,9 @@ public class Room {
 
     public Square[][] getBoard() {
         return board;
+    }
+
+    public int getMineNum() {
+        return mineNum;
     }
 }

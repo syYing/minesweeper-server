@@ -34,6 +34,7 @@ public class GameController {
         try {
             o.put("id", room.getId());
             o.put("key", room.getKey());
+            o.put("mineNum", room.getMineNum());
         } catch (JSONException e) {
             e.printStackTrace();
         }
