@@ -87,7 +87,7 @@ public class GameController {
 
         room.flag(x, y);
 
-        return room.getBoard()[x][y].getState() == Square.State.FLAGGED ? 1 : 0;
+        return room.getBoard()[x][y].getState().ordinal();
     }
 
     @ExceptionHandler(HttpException.class)
