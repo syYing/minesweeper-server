@@ -1,6 +1,7 @@
 package me.lucien.minesweeper.web;
 
 import me.lucien.minesweeper.domain.Room;
+import me.lucien.minesweeper.domain.Square;
 import me.lucien.minesweeper.domain.SquareData;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -75,8 +76,8 @@ public class GameController {
     }
 
     @PatchMapping("/room/{id}/square/{x}/{y}")
-    public void rightClick(@PathVariable("id") int id, @PathVariable("x") int x, @PathVariable("y") int y,
-                           @RequestParam("key") String key) throws HttpException {
+    public int rightClick(@PathVariable("id") int id, @PathVariable("x") int x, @PathVariable("y") int y,
+                          @RequestParam("key") String key) throws HttpException {
         checkLegitimacy(id, key);
         Room room = roomMap.get(id);
 
@@ -85,6 +86,8 @@ public class GameController {
         }
 
         room.flag(x, y);
+
+        return room.getBoard()[x][y].getState().ordinal();
     }
 
     @ExceptionHandler(HttpException.class)
