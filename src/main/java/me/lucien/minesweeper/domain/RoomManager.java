@@ -29,10 +29,11 @@ public class RoomManager {
         }
 
         Room room = new Room(width, height);
-        roomMap.put(room.getId(), room);
+        int id = room.getId();
+        roomMap.put(id, room);
 
         ScheduledFuture<?> future = executorService.schedule(
-                () -> roomMap.remove(room.getId()),
+                () -> deleteRoom(id),
                 delay, TimeUnit.SECONDS);
         taskMap.put(room.getId(), future);
 
@@ -50,20 +51,18 @@ public class RoomManager {
     }
 
     public void deleteRoom(int id) {
-        if (roomMap.containsKey(id)) {
-            roomMap.remove(id);
-            taskMap.remove(id);
-        }
+        roomMap.remove(id);
+        ScheduledFuture<?> future = taskMap.get(id);
+        future.cancel(false);
+        taskMap.remove(id);
     }
 
-    public void resetSchedule(int id) {
+    private void resetSchedule(int id) {
         ScheduledFuture<?> future = taskMap.get(id);
-        while (!future.isCancelled()) {
-            future.cancel(true);
-        }
+        future.cancel(false);
 
         future = executorService.schedule(
-                () -> roomMap.remove(id),
+                () -> deleteRoom(id),
                 delay, TimeUnit.SECONDS);
         taskMap.put(id, future);
     }
