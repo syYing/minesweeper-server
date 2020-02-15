@@ -140,4 +140,50 @@ public class RoomTest {
             assertEquals(-1, res.get(i).getNum());
         }
     }
+
+    @Test
+    public void testCountFlagged() {
+        Room room = new Room(15, 10);
+        Square[][] board = room.getBoard();
+        int x = 1;
+        int y = 1;
+        int[] cx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+        int[] cy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+
+        for (int i = 0; i < cx.length; i++) {
+            if (i == 1 || i == 8) {
+                board[x + cx[i]][y + cy[i]].setMine(true);
+                room.flag(x + cx[i], y + cy[i]);
+            } else {
+                board[x + cx[i]][y + cy[i]].setMine(false);
+            }
+        }
+
+        assertEquals(2, room.countFlagged(x, y));
+    }
+
+    @Test
+    public void testGetAround() {
+        Room room = new Room(15, 10);
+        Square[][] board = room.getBoard();
+        int x = 1;
+        int y = 1;
+        int[] cx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+        int[] cy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+
+        for (int i = 0; i < cx.length; i++) {
+            if (i == 1 || i == 8) {
+                board[x + cx[i]][y + cy[i]].setMine(true);
+                room.flag(x + cx[i], y + cy[i]);
+            } else {
+                board[x + cx[i]][y + cy[i]].setMine(false);
+            }
+        }
+
+        room.uncover(x, y);
+        assertEquals(6, room.getAround(x, y).size());
+
+        room.uncover(x, y + 1);
+        assertEquals(5, room.getAround(x, y).size());
+    }
 }

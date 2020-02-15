@@ -149,6 +149,55 @@ public class Room {
         return res;
     }
 
+    public List<SquareData> getAround(int x, int y) {
+        List<SquareData> res = new ArrayList<>();
+
+        if (board[x][y].getState() != Square.State.UNCOVERED
+                || countFlagged(x, y) != count(x, y)) {
+            return res;
+        }
+
+        int[] cx = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] cy = {-1, 0, 1, -1, 1, -1, 0, 1};
+        int num = 0;
+
+        for (int i = 0; i < cx.length; i++) {
+            int newx = x + cx[i];
+            int newy = y + cy[i];
+
+            if (newx < 0 || newx >= this.width || newy < 0 || newy >= this.height) {
+                continue;
+            }
+
+            if (board[newx][newy].getState() == Square.State.COVERED) {
+                res.add(new SquareData(x, y, count(x, y)));
+            }
+        }
+
+        return res;
+    }
+
+    public int countFlagged(int x, int y) {
+        int[] cx = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] cy = {-1, 0, 1, -1, 1, -1, 0, 1};
+        int num = 0;
+
+        for (int i = 0; i < cx.length; i++) {
+            int newx = x + cx[i];
+            int newy = y + cy[i];
+
+            if (newx < 0 || newx >= this.width || newy < 0 || newy >= this.height) {
+                continue;
+            }
+
+            if (board[newx][newy].getState() == Square.State.FLAGGED) {
+                num++;
+            }
+        }
+
+        return num;
+    }
+
     public int getId() {
         return id;
     }
