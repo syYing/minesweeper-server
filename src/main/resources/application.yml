@@ -1,4 +1,7 @@
+
 room:
-  capacity: 1000
+  capacity:
+    1000
 
-
+  delay:
+    3600
