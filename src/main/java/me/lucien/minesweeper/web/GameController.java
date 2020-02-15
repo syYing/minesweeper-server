@@ -1,11 +1,9 @@
 package me.lucien.minesweeper.web;
 
 import me.lucien.minesweeper.domain.Room;
-import me.lucien.minesweeper.domain.Square;
 import me.lucien.minesweeper.domain.SquareData;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +30,9 @@ public class GameController {
         roomMap.put(room.getId(), room);
 
         JSONObject o = new JSONObject();
-        try {
-            o.put("id", room.getId());
-            o.put("key", room.getKey());
-            o.put("mineNum", room.getMineNum());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        o.put("id", room.getId());
+        o.put("key", room.getKey());
+        o.put("mineNum", room.getMineNum());
 
         return o.toString();
     }
