@@ -3,6 +3,7 @@ package me.lucien.minesweeper.domain;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -14,13 +15,13 @@ import java.util.concurrent.TimeUnit;
 public class RoomManager {
 
     @Value("${room.capacity}")
-    private int capacity;
+    private int capacity = 1000;
 
     @Value("${room.delay}")
-    private int delay;
+    private int delay = 3600;
 
-    private Map<Integer, Room> roomMap = new HashMap<>();
-    private Map<Integer, ScheduledFuture<?>> taskMap = new HashMap<>();
+    private Map<Integer, Room> roomMap = Collections.synchronizedMap(new HashMap<>());
+    private Map<Integer, ScheduledFuture<?>> taskMap = Collections.synchronizedMap(new HashMap<>());
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     public Room createRoom(int width, int height) {
@@ -31,11 +32,7 @@ public class RoomManager {
         Room room = new Room(width, height);
         int id = room.getId();
         roomMap.put(id, room);
-
-        ScheduledFuture<?> future = executorService.schedule(
-                () -> deleteRoom(id),
-                delay, TimeUnit.SECONDS);
-        taskMap.put(room.getId(), future);
+        resetSchedule(id);
 
         return room;
     }
@@ -59,10 +56,15 @@ public class RoomManager {
 
     private void resetSchedule(int id) {
         ScheduledFuture<?> future = taskMap.get(id);
-        future.cancel(false);
+        if (future != null) {
+            future.cancel(false);
+        }
 
         future = executorService.schedule(
-                () -> deleteRoom(id),
+                () -> {
+                    roomMap.remove(id);
+                    taskMap.remove(id);
+                },
                 delay, TimeUnit.SECONDS);
         taskMap.put(id, future);
     }
