@@ -24,7 +24,7 @@ public class RoomManager {
     private int delay;
 
     private Map<Integer, Room> roomMap = new HashMap<>();
-    private Map<Integer, ScheduledFuture> taskMap = new HashMap<>();
+    private Map<Integer, ScheduledFuture<?>> taskMap = new HashMap<>();
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     public String createRoom(int width, int height) throws HttpException {
@@ -35,7 +35,7 @@ public class RoomManager {
         Room room = new Room(width, height);
         roomMap.put(room.getId(), room);
 
-        ScheduledFuture future = executorService.schedule(
+        ScheduledFuture<?> future = executorService.schedule(
                 () -> { roomMap.remove(room.getId()); }, delay, TimeUnit.SECONDS);
         taskMap.put(room.getId(), future);
 
@@ -102,7 +102,7 @@ public class RoomManager {
     }
 
     private void resetSchedule(int id) {
-        ScheduledFuture future = taskMap.get(id);
+        ScheduledFuture<?> future = taskMap.get(id);
         while (!future.isCancelled()) {
             future.cancel(true);
         }
