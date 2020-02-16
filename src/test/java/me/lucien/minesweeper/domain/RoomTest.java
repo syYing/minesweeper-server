@@ -140,4 +140,50 @@ public class RoomTest {
             assertEquals(-1, res.get(i).getNum());
         }
     }
+
+    @Test
+    public void testCountFlags() {
+        Room room = new Room(15, 10);
+        Square[][] board = room.getBoard();
+        int x = 1;
+        int y = 1;
+        int[] cx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+        int[] cy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+
+        for (int i = 0; i < cx.length; i++) {
+            if (i == 1 || i == 8) {
+                board[x + cx[i]][y + cy[i]].setMine(true);
+                room.flag(x + cx[i], y + cy[i]);
+            } else {
+                board[x + cx[i]][y + cy[i]].setMine(false);
+            }
+        }
+
+        assertEquals(2, room.countFlags(x, y));
+    }
+
+    @Test
+    public void testOutspread() {
+        Room room = new Room(15, 10);
+        Square[][] board = room.getBoard();
+        removeMine(board);
+
+        board[0][0].setMine(true);
+        board[0][4].setMine(true);
+        board[2][2].setMine(true);
+        board[3][0].setMine(true);
+
+        room.uncover(1, 1);
+        room.flag(0, 0);
+        room.flag(2, 2);
+        assertEquals(8, room.outspread(1, 1).size());
+    }
+
+    private void removeMine(Square[][] board) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++){
+                board[i][j].setMine(false);
+            }
+        }
+    }
 }

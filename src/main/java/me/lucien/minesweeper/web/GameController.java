@@ -33,8 +33,7 @@ public class GameController {
     }
 
     @GetMapping("/room/{id}")
-    public List<SquareData> enterRoom(@PathVariable("id") int id,
-                                      @RequestParam("key") String key) throws HttpException {
+    public List<SquareData> enterRoom(@PathVariable("id") int id, @RequestParam("key") String key) throws HttpException {
         checkLegitimacy(id, key);
 
         Room room = roomManager.getRoom(id);
@@ -43,8 +42,7 @@ public class GameController {
     }
 
     @DeleteMapping("/room/{id}")
-    public void deleteRoom(@PathVariable("id") int id,
-                           @RequestParam("key") String key) throws HttpException {
+    public void deleteRoom(@PathVariable("id") int id, @RequestParam("key") String key) throws HttpException {
         checkLegitimacy(id, key);
 
         roomManager.deleteRoom(id);
@@ -72,10 +70,22 @@ public class GameController {
         if (x < 0 || x >= room.getWidth() || y < 0 || y >= room.getHeight()) {
             throw new IndexOutOfBoundsException();
         }
-
         room.flag(x, y);
 
         return room.getBoard()[x][y].getState().ordinal();
+    }
+
+    @PostMapping("room/{id}/outspread")
+    public List<SquareData> doubleClick(@PathVariable("id") int id, @RequestParam("key") String key,
+                                        @RequestParam("x") int x, @RequestParam("y") int y) throws HttpException {
+        checkLegitimacy(id, key);
+
+        Room room = roomManager.getRoom(id);
+        if (x < 0 || x >= room.getWidth() || y < 0 || y >= room.getHeight()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        return room.outspread(x, y);
     }
 
     @ExceptionHandler(HttpException.class)
