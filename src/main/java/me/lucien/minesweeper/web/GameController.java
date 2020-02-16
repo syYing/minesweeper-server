@@ -34,16 +34,14 @@ public class GameController {
 
     @GetMapping("/room/{id}")
     public List<SquareData> enterRoom(@PathVariable("id") int id, @RequestParam("key") String key) throws HttpException {
-        checkLegitimacy(id, key);
-
-        Room room = roomManager.getRoom(id);
+        Room room = findRoom(id, key);
 
         return room.getGameData();
     }
 
     @DeleteMapping("/room/{id}")
     public void deleteRoom(@PathVariable("id") int id, @RequestParam("key") String key) throws HttpException {
-        checkLegitimacy(id, key);
+        findRoom(id, key);
 
         roomManager.deleteRoom(id);
     }
@@ -51,9 +49,7 @@ public class GameController {
     @PostMapping("/room/{id}/square/{x}/{y}")
     public List<SquareData> leftClick(@PathVariable("id") int id, @PathVariable("x") int x, @PathVariable("y") int y,
                                       @RequestParam("key") String key) throws HttpException {
-        checkLegitimacy(id, key);
-
-        Room room = roomManager.getRoom(id);
+        Room room = findRoom(id, key);
         if (x < 0 || x >= room.getWidth() || y < 0 || y >= room.getHeight()) {
             throw new IndexOutOfBoundsException();
         }
@@ -64,9 +60,7 @@ public class GameController {
     @PatchMapping("/room/{id}/square/{x}/{y}")
     public int rightClick(@PathVariable("id") int id, @PathVariable("x") int x, @PathVariable("y") int y,
                           @RequestParam("key") String key) throws HttpException {
-        checkLegitimacy(id, key);
-
-        Room room = roomManager.getRoom(id);
+        Room room = findRoom(id, key);
         if (x < 0 || x >= room.getWidth() || y < 0 || y >= room.getHeight()) {
             throw new IndexOutOfBoundsException();
         }
@@ -78,9 +72,7 @@ public class GameController {
     @PostMapping("room/{id}/outspread")
     public List<SquareData> doubleClick(@PathVariable("id") int id, @RequestParam("key") String key,
                                         @RequestParam("x") int x, @RequestParam("y") int y) throws HttpException {
-        checkLegitimacy(id, key);
-
-        Room room = roomManager.getRoom(id);
+        Room room = findRoom(id, key);
         if (x < 0 || x >= room.getWidth() || y < 0 || y >= room.getHeight()) {
             throw new IndexOutOfBoundsException();
         }
@@ -93,7 +85,7 @@ public class GameController {
         return new ResponseEntity<>(e.getMessage(), e.getStatus());
     }
 
-    private void checkLegitimacy(int id, String key) throws HttpException {
+    private Room findRoom(int id, String key) throws HttpException {
         Room room = roomManager.getRoom(id);
         if (room == null) {
             throw new HttpException(HttpStatus.NOT_FOUND, "The room does't exist.");
@@ -102,5 +94,7 @@ public class GameController {
         if (!room.getKey().equals(key)) {
             throw new HttpException(HttpStatus.FORBIDDEN, "The key is wrong.");
         }
+
+        return room;
     }
 }
