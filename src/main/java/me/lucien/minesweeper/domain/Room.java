@@ -1,6 +1,7 @@
 package me.lucien.minesweeper.domain;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static me.lucien.minesweeper.util.StringGenerator.generateRandomString;
 

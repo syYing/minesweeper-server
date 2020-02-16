@@ -1,33 +1,28 @@
 package me.lucien.minesweeper.web;
 
 import me.lucien.minesweeper.domain.Room;
+import me.lucien.minesweeper.domain.RoomManager;
 import me.lucien.minesweeper.domain.SquareData;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class GameController {
 
-    private Map<Integer, Room> roomMap = new HashMap<>();
-
-    @Value("${room.capacity}")
-    private int capacity;
+    @Autowired
+    private RoomManager roomManager;
 
     @PostMapping("/room")
     public String createRoom(@RequestParam("width") int width, @RequestParam("height") int height) throws HttpException {
-        if (roomMap.size() >= capacity) {
-            throw  new HttpException(HttpStatus.SERVICE_UNAVAILABLE, "No available room.");
+        Room room = roomManager.createRoom(width, height);
+        if (room == null) {
+            throw new HttpException(HttpStatus.SERVICE_UNAVAILABLE, "No available room.");
         }
-
-        Room room = new Room(width, height);
-        roomMap.put(room.getId(), room);
 
         JSONObject o = new JSONObject();
         o.put("id", room.getId());
@@ -42,7 +37,7 @@ public class GameController {
                                       @RequestParam("key") String key) throws HttpException {
         checkLegitimacy(id, key);
 
-        Room room = roomMap.get(id);
+        Room room = roomManager.getRoom(id);
 
         return room.getGameData();
     }
@@ -51,30 +46,29 @@ public class GameController {
     public void deleteRoom(@PathVariable("id") int id,
                            @RequestParam("key") String key) throws HttpException {
         checkLegitimacy(id, key);
-        roomMap.remove(id);
+
+        roomManager.deleteRoom(id);
     }
 
     @PostMapping("/room/{id}/square/{x}/{y}")
     public List<SquareData> leftClick(@PathVariable("id") int id, @PathVariable("x") int x, @PathVariable("y") int y,
                                       @RequestParam("key") String key) throws HttpException {
         checkLegitimacy(id, key);
-        Room room = roomMap.get(id);
 
+        Room room = roomManager.getRoom(id);
         if (x < 0 || x >= room.getWidth() || y < 0 || y >= room.getHeight()) {
             throw new IndexOutOfBoundsException();
         }
 
-        List<SquareData> res = room.uncover(x, y);
-
-        return res;
+        return room.uncover(x, y);
     }
 
     @PatchMapping("/room/{id}/square/{x}/{y}")
     public int rightClick(@PathVariable("id") int id, @PathVariable("x") int x, @PathVariable("y") int y,
                           @RequestParam("key") String key) throws HttpException {
         checkLegitimacy(id, key);
-        Room room = roomMap.get(id);
 
+        Room room = roomManager.getRoom(id);
         if (x < 0 || x >= room.getWidth() || y < 0 || y >= room.getHeight()) {
             throw new IndexOutOfBoundsException();
         }
@@ -90,11 +84,10 @@ public class GameController {
     }
 
     private void checkLegitimacy(int id, String key) throws HttpException {
-        if (!roomMap.containsKey(id)) {
+        Room room = roomManager.getRoom(id);
+        if (room == null) {
             throw new HttpException(HttpStatus.NOT_FOUND, "The room does't exist.");
         }
-
-        Room room = roomMap.get(id);
 
         if (!room.getKey().equals(key)) {
             throw new HttpException(HttpStatus.FORBIDDEN, "The key is wrong.");
