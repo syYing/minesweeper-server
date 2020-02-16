@@ -3,25 +3,19 @@ package me.lucien.minesweeper.domain;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Component
 public class RoomManager {
 
-    @Value("${room.capacity}")
-    private int capacity = 1000;
+    @Value("${room.capacity:1000}")
+    private int capacity;
 
-    @Value("${room.delay}")
-    private int delay = 3600;
+    @Value("${room.delay:3600}")
+    private int delay;
 
-    private Map<Integer, Room> roomMap = Collections.synchronizedMap(new HashMap<>());
-    private Map<Integer, ScheduledFuture<?>> taskMap = Collections.synchronizedMap(new HashMap<>());
+    private ConcurrentMap<Integer, Room> roomMap = new ConcurrentHashMap<>();
+    private ConcurrentMap<Integer, ScheduledFuture<?>> taskMap = new ConcurrentHashMap<>();
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     public Room createRoom(int width, int height) {
