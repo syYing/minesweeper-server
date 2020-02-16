@@ -17,6 +17,9 @@ public class Room {
     private int mineNum;
     private Square[][] board;
 
+    private final int[] cx = {-1, -1, -1, 0, 0, 1, 1, 1};
+    private final int[] cy = {-1, 0, 1, -1, 1, -1, 0, 1};
+
     public Room(int width, int height) {
         this.id = roomId++;
         this.key = generateRandomString(32);
@@ -74,9 +77,6 @@ public class Room {
         board[x][y].setState(Square.State.UNCOVERED);
 
         if (num == 0) {
-            int[] cx = {-1, -1, -1, 0, 0, 1, 1, 1};
-            int[] cy = {-1, 0, 1, -1, 1, -1, 0, 1};
-
             for (int i = 0; i < cx.length; i++) {
                 int newx = x + cx[i];
                 int newy = y + cy[i];
@@ -87,8 +87,6 @@ public class Room {
     }
 
     public int count(int x, int y) {
-        int[] cx = {-1, -1, -1, 0, 0, 1, 1, 1};
-        int[] cy = {-1, 0, 1, -1, 1, -1, 0, 1};
         int num = 0;
 
         for (int i = 0; i < cx.length; i++) {
@@ -149,17 +147,13 @@ public class Room {
         return res;
     }
 
-    public List<SquareData> getAround(int x, int y) {
+    public List<SquareData> outSpread(int x, int y) {
         List<SquareData> res = new ArrayList<>();
 
         if (board[x][y].getState() != Square.State.UNCOVERED
-                || countFlagged(x, y) != count(x, y)) {
+                || countFlags(x, y) != count(x, y)) {
             return res;
         }
-
-        int[] cx = {-1, -1, -1, 0, 0, 1, 1, 1};
-        int[] cy = {-1, 0, 1, -1, 1, -1, 0, 1};
-        int num = 0;
 
         for (int i = 0; i < cx.length; i++) {
             int newx = x + cx[i];
@@ -170,16 +164,14 @@ public class Room {
             }
 
             if (board[newx][newy].getState() == Square.State.COVERED) {
-                res.add(new SquareData(x, y, count(x, y)));
+                res.addAll(uncover(newx, newy));
             }
         }
 
         return res;
     }
 
-    public int countFlagged(int x, int y) {
-        int[] cx = {-1, -1, -1, 0, 0, 1, 1, 1};
-        int[] cy = {-1, 0, 1, -1, 1, -1, 0, 1};
+    public int countFlags(int x, int y) {
         int num = 0;
 
         for (int i = 0; i < cx.length; i++) {

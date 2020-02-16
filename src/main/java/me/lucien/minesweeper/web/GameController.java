@@ -75,7 +75,7 @@ public class GameController {
         return room.getBoard()[x][y].getState().ordinal();
     }
 
-    @PostMapping("room/{id}/batch")
+    @PostMapping("room/{id}/outspread")
     public List<SquareData> doubleClick(@PathVariable("id") int id, @RequestParam("key") String key,
                                         @RequestParam("x") int x, @RequestParam("y") int y) throws HttpException {
         checkLegitimacy(id, key);
@@ -85,7 +85,7 @@ public class GameController {
             throw new IndexOutOfBoundsException();
         }
 
-        return room.getAround(x, y);
+        return room.outSpread(x, y);
     }
 
     @ExceptionHandler(HttpException.class)
