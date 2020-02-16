@@ -85,7 +85,7 @@ public class GameController {
             throw new IndexOutOfBoundsException();
         }
 
-        return room.outSpread(x, y);
+        return room.outspread(x, y);
     }
 
     @ExceptionHandler(HttpException.class)

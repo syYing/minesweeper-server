@@ -8,6 +8,8 @@ import static me.lucien.minesweeper.util.StringGenerator.generateRandomString;
 public class Room {
 
     private static int roomId = 1;
+    private static final int[] CX = {-1, -1, -1, 0, 0, 1, 1, 1};
+    private static final int[] CY = {-1, 0, 1, -1, 1, -1, 0, 1};
 
     private int id;
     private String key;
@@ -16,9 +18,6 @@ public class Room {
     private int height;
     private int mineNum;
     private Square[][] board;
-
-    private final int[] cx = {-1, -1, -1, 0, 0, 1, 1, 1};
-    private final int[] cy = {-1, 0, 1, -1, 1, -1, 0, 1};
 
     public Room(int width, int height) {
         this.id = roomId++;
@@ -77,9 +76,9 @@ public class Room {
         board[x][y].setState(Square.State.UNCOVERED);
 
         if (num == 0) {
-            for (int i = 0; i < cx.length; i++) {
-                int newx = x + cx[i];
-                int newy = y + cy[i];
+            for (int i = 0; i < CX.length; i++) {
+                int newx = x + CX[i];
+                int newy = y + CY[i];
 
                 spread(newx, newy, res);
             }
@@ -89,9 +88,9 @@ public class Room {
     public int count(int x, int y) {
         int num = 0;
 
-        for (int i = 0; i < cx.length; i++) {
-            int newx = x + cx[i];
-            int newy = y + cy[i];
+        for (int i = 0; i < CX.length; i++) {
+            int newx = x + CX[i];
+            int newy = y + CY[i];
 
             if (newx < 0 || newx >= this.width || newy < 0 || newy >= this.height) {
                 continue;
@@ -147,7 +146,7 @@ public class Room {
         return res;
     }
 
-    public List<SquareData> outSpread(int x, int y) {
+    public List<SquareData> outspread(int x, int y) {
         List<SquareData> res = new ArrayList<>();
 
         if (board[x][y].getState() != Square.State.UNCOVERED
@@ -155,9 +154,9 @@ public class Room {
             return res;
         }
 
-        for (int i = 0; i < cx.length; i++) {
-            int newx = x + cx[i];
-            int newy = y + cy[i];
+        for (int i = 0; i < CX.length; i++) {
+            int newx = x + CX[i];
+            int newy = y + CY[i];
 
             if (newx < 0 || newx >= this.width || newy < 0 || newy >= this.height) {
                 continue;
@@ -174,9 +173,9 @@ public class Room {
     public int countFlags(int x, int y) {
         int num = 0;
 
-        for (int i = 0; i < cx.length; i++) {
-            int newx = x + cx[i];
-            int newy = y + cy[i];
+        for (int i = 0; i < CX.length; i++) {
+            int newx = x + CX[i];
+            int newy = y + CY[i];
 
             if (newx < 0 || newx >= this.width || newy < 0 || newy >= this.height) {
                 continue;

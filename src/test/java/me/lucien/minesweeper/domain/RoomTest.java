@@ -163,7 +163,7 @@ public class RoomTest {
     }
 
     @Test
-    public void testOutSpread() {
+    public void testOutspread() {
         Room room = new Room(15, 10);
         Square[][] board = room.getBoard();
         removeMine(board);
@@ -176,7 +176,7 @@ public class RoomTest {
         room.uncover(1, 1);
         room.flag(0, 0);
         room.flag(2, 2);
-        assertEquals(8, room.outSpread(1, 1).size());
+        assertEquals(8, room.outspread(1, 1).size());
     }
 
     private void removeMine(Square[][] board) {
